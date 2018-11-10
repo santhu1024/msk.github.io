@@ -1,0 +1,68 @@
+<html>
+
+<h1>Hello World, testing</h1>
+<div id="audio_buttons">
+    <audio id="audio_file_id" controls="" autoplay="" name="media"><source type="audio/mp3"></audio>
+    <div id="emotion_buttons" class="btn-group">
+        <input id="1" type="button" onclick="showalert(this.id)">Happy</input>
+        <input id="2" type="button" onclick="showalert(this.id)">Sad</input>
+        <input id="3" type="button" onclick="showalert(this.id)">JoyFul</input>
+        <input id="4" type="button" onclick="showalert(this.id)">Angry</input>
+        <input id="5" type="button" onclick="showalert(this.id)">Peaceful</input>
+    </div>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="buzz.js"></script>
+
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDpA2I1s1Q86QJ3bcEE5r_7pMUW9QeRkOA",
+        authDomain: "emotionalvoiceapp.firebaseapp.com",
+        databaseURL: "https://emotionalvoiceapp.firebaseio.com",
+        projectId: "emotionalvoiceapp",
+        storageBucket: "emotionalvoiceapp.appspot.com",
+        messagingSenderId: "859941035911"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+    var audio_file_ref = database.ref('audio_files/user/audio_file');
+    var user_ref = database.ref('audio_files/user')
+
+    function showalert(id){
+        // $(".audio_file_class").attr("src", audio_file_link)
+        updates = {
+            response:id
+        }
+        user_ref.update(updates)
+        console.log("Updated response with selected id : "+id)
+
+        document.getElementById("audio_buttons").style.display = "none"
+        alert("Response Sent Successfully!!")
+        // console.log(snapshot.val())
+        // updateStarCount(postElement, snapshot.val());
+    }
+
+    // // This is Shashanks side code
+    //
+    // database.ref('audio_files/' + 'user').set({
+    //     audio_file : "https://firebasestorage.googleapis.com/v0/b/emotionalvoiceapp.appspot.com/o/emotionalvoice%2Fhorse2.ogg?alt=media&token=b7c1b1c3-845a-4bb7-88ab-2101cba0dfd7",
+    // });
+    // console.log("Updated audio file")
+
+    audio_file_ref.on('value', function(snapshot) {
+        audio_file_link = snapshot.val()
+
+        document.getElementById("audio_file_id").src = audio_file_link
+        document.getElementById("audio_buttons").style.display = "block"
+        // document.getElementById("emotion_buttons").style.display = "block"
+    });
+
+</script>
+
+</html>
